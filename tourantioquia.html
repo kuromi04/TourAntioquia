@@ -1,0 +1,459 @@
+<html><head><base href="https://tourantioquia.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TourAntioquia - Descubre la Magia de Colombia</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+  :root {
+    --primary-color: #4CAF50;
+    --secondary-color: #FFC107;
+    --background-color: #FFFFFF;
+    --text-color: #333333;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  body.dark-mode {
+    --background-color: #121212;
+    --text-color: #FFFFFF;
+  }
+  
+  .navbar {
+    background-color: var(--background-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .navbar-brand, .nav-link {
+    color: var(--text-color) !important;
+  }
+  
+  .hero {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://source.unsplash.com/random/1600x900/?colombia,landscape');
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+  }
+  
+  .tour-card {
+    transition: transform 0.3s;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .tour-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+  }
+
+  .auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background-color: var(--background-color);
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .auth-toggle {
+    cursor: pointer;
+    color: var(--primary-color);
+  }
+
+  .dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .dark-mode-toggle:hover {
+    background-color: var(--secondary-color);
+  }
+
+  .tour-image {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .about-section {
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+    padding: 4rem 0;
+  }
+
+  .promotion-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+  }
+
+  .icon-feature {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+</style>
+</head>
+<body>
+
+<button class="dark-mode-toggle" id="darkModeToggle">
+  <i class="fas fa-moon"></i>
+</button>
+
+<div id="authPage" class="auth-container">
+  <div class="auth-card">
+    <h2 class="text-center mb-4" id="authTitle">Iniciar Sesión</h2>
+    <form id="authForm">
+      <div class="mb-3" id="nameField" style="display: none;">
+        <label for="name" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="name" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo Electrónico</label>
+        <input type="email" class="form-control" id="email" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100" id="authSubmit">Iniciar Sesión</button>
+    </form>
+    <p class="text-center mt-3">
+      <span id="authToggleText">¿No tienes una cuenta?</span>
+      <span class="auth-toggle" id="authToggle">Regístrate</span>
+    </p>
+  </div>
+</div>
+
+<div id="mainContent" style="display: none;">
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">TourAntioquia</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#tours"><i class="fas fa-map-marked-alt"></i> Tours</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about"><i class="fas fa-info-circle"></i> Sobre Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#promotions"><i class="fas fa-percentage"></i> Promociones</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact"><i class="fas fa-envelope"></i> Contacto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <h1 class="display-4">Descubre la Magia de Colombia con TourAntioquia</h1>
+      <p class="lead">Experiencias únicas en el corazón de Antioquia</p>
+      <a href="#tours" class="btn btn-primary btn-lg"><i class="fas fa-search"></i> Explorar Tours</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="about" class="about-section">
+      <div class="container">
+        <h2 class="text-center mb-5">Sobre Nosotros</h2>
+        <div class="row">
+          <div class="col-md-4 text-center mb-4">
+            <i class="fas fa-medal icon-feature"></i>
+            <h3>Experiencia</h3>
+            <p>Más de 10 años creando experiencias inolvidables en Colombia</p>
+          </div>
+          <div class="col-md-4 text-center mb-4">
+            <i class="fas fa-hand-holding-usd icon-feature"></i>
+            <h3>Mejor Precio</h3>
+            <p>Garantizamos los precios más competitivos del mercado</p>
+          </div>
+          <div class="col-md-4 text-center mb-4">
+            <i class="fas fa-users icon-feature"></i>
+            <h3>Atención Personalizada</h3>
+            <p>Nuestro equipo está dedicado a hacer tu viaje perfecto</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tours" class="container my-5">
+      <h2 class="text-center mb-4">Nuestros Tours</h2>
+      <div class="row" id="tourList">
+        <!-- Tour cards will be dynamically inserted here -->
+      </div>
+    </section>
+
+    <section id="promotions" class="bg-light py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">Promociones Especiales</h2>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-users fa-3x mb-3 text-primary"></i>
+                <h5 class="card-title">Descuento de Grupo</h5>
+                <p class="card-text">Reserva para un grupo de 5 o más personas y obtén un 15% de descuento en tu tour.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-calendar-alt fa-3x mb-3 text-primary"></i>
+                <h5 class="card-title">Reserva Anticipada</h5>
+                <p class="card-text">Reserva con 3 meses de anticipación y disfruta de un 10% de descuento en tu aventura.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-redo fa-3x mb-3 text-primary"></i>
+                <h5 class="card-title">Viajero Frecuente</h5>
+                <p class="card-text">Después de tu tercer tour con nosotros, obtén un 20% de descuento en tu próxima reserva.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-dark text-light py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>TourAntioquia</h5>
+          <p>Descubre la magia de Colombia con nosotros.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li><a href="#tours" class="text-light"><i class="fas fa-map-marked-alt"></i> Tours</a></li>
+            <li><a href="#about" class="text-light"><i class="fas fa-info-circle"></i> Sobre Nosotros</a></li>
+            <li><a href="#promotions" class="text-light"><i class="fas fa-percentage"></i> Promociones</a></li>
+            <li><a href="#contact" class="text-light"><i class="fas fa-envelope"></i> Contacto</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Síguenos</h5>
+          <a href="https://facebook.com" class="text-light me-2"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://instagram.com" class="text-light me-2"><i class="fab fa-instagram"></i></a>
+          <a href="https://twitter.com" class="text-light"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+// Simulación de datos de tours (en una aplicación real, estos vendrían de una API)
+const tours = [
+  {
+    id: 1,
+    title: 'Aventura en Guatapé',
+    description: 'Explora el colorido pueblo de Guatapé y sube los 740 escalones de la Piedra del Peñol.',
+    location: 'Guatapé, Antioquia',
+    date: '2023-07-15',
+    price: 200000,
+    promotionPrice: 180000,
+    capacity: 15,
+    image: 'https://images.unsplash.com/photo-1628201509331-d6e4f96d6fba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+  },
+  {
+    id: 2,
+    title: 'Jardín: Pueblo Patrimonio',
+    description: 'Descubre la arquitectura colonial y las tradiciones cafeteras en este hermoso pueblo.',
+    location: 'Jardín, Antioquia',
+    date: '2023-08-01',
+    price: 250000,
+    promotionPrice: 225000,
+    capacity: 20,
+    image: 'https://images.unsplash.com/photo-1589483232748-515c025575f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+  },
+  {
+    id: 3,
+    title: 'Parque Arví: Naturaleza y Cultura',
+    description: 'Disfruta de senderos ecológicos y aprende sobre la cultura campesina en este parque natural.',
+    location: 'Medellín, Antioquia',
+    date: '2023-09-10',
+    price: 150000,
+    promotionPrice: 135000,
+    capacity: 25,
+    image: 'https://images.unsplash.com/photo-1635201821134-0ebc63917526?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
+  }
+];
+
+// Función para generar las tarjetas de tour
+function generateTourCards() {
+  const tourList = document.getElementById('tourList');
+  tourList.innerHTML = '';
+  
+  tours.forEach(tour => {
+    const card = document.createElement('div');
+    card.className = 'col-md-4 mb-4';
+    card.innerHTML = `
+      <div class="card tour-card">
+        <img src="${tour.image}" class="card-img-top tour-image" alt="${tour.title}">
+        <div class="promotion-badge">¡10% OFF!</div>
+        <div class="card-body">
+          <h5 class="card-title">${tour.title}</h5>
+          <p class="card-text">${tour.description}</p>
+          <p><i class="fas fa-map-marker-alt"></i> <strong>Lugar:</strong> ${tour.location}</p>
+          <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> ${tour.date}</p>
+          <p><i class="fas fa-tag"></i> <strong>Precio:</strong> <del>$${tour.price.toLocaleString()}</del> <span class="text-danger">$${tour.promotionPrice.toLocaleString()}</span></p>
+          <p><i class="fas fa-users"></i> <strong>Cupos:</strong> ${tour.capacity}</p>
+          <a href="#" class="btn btn-primary" onclick="bookTour(${tour.id})"><i class="fas fa-book"></i> Reservar</a>
+        </div>
+      </div>
+    `;
+    tourList.appendChild(card);
+  });
+}
+
+// Función para reservar un tour (simulada)
+function bookTour(tourId) {
+  alert(`Has reservado el tour con ID: ${tourId}`);
+  // Aquí iría la lógica para procesar la reserva
+}
+
+// Manejador del formulario de autenticación
+document.getElementById('authForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const name = document.getElementById('name').value;
+  
+  const isRegistering = document.getElementById('authTitle').textContent === 'Registro';
+
+  if (isRegistering) {
+    // Registrar nuevo usuario
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    if (users.some(user => user.email === email)) {
+      alert('Este correo electrónico ya está registrado.');
+      return;
+    }
+    users.push({ name, email, password });
+    localStorage.setItem('users', JSON.stringify(users));
+    alert('Registro exitoso. Por favor, inicia sesión.');
+    toggleAuthMode();
+  } else {
+    // Iniciar sesión
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      document.getElementById('authPage').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+      generateTourCards();
+    } else {
+      alert('Correo electrónico o contraseña incorrectos.');
+    }
+  }
+});
+
+// Toggle entre inicio de sesión y registro
+function toggleAuthMode() {
+  const isLogin = document.getElementById('authTitle').textContent === 'Iniciar Sesión';
+  document.getElementById('authTitle').textContent = isLogin ? 'Registro' : 'Iniciar Sesión';
+  document.getElementById('authSubmit').textContent = isLogin ? 'Registrarse' : 'Iniciar Sesión';
+  document.getElementById('authToggleText').textContent = isLogin ? '¿Ya tienes una cuenta?' : '¿No tienes una cuenta?';
+  document.getElementById('authToggle').textContent = isLogin ? 'Inicia Sesión' : 'Regístrate';
+  document.getElementById('nameField').style.display = isLogin ? 'block' : 'none';
+}
+
+document.getElementById('authToggle').addEventListener('click', toggleAuthMode);
+
+// Manejador de cierre de sesión
+document.getElementById('logoutBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+  localStorage.removeItem('currentUser');
+  document.getElementById('authPage').style.display = 'flex';
+  document.getElementById('mainContent').style.display = 'none';
+});
+
+// Mostrar la página de autenticación al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+  const currentUser = localStorage.getItem('currentUser');
+  if (currentUser) {
+    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    generateTourCards();
+  } else {
+    document.getElementById('authPage').style.display = 'flex';
+    document.getElementById('mainContent').style.display = 'none';
+  }
+});
+
+// Modo oscuro
+const darkModeToggle = document.getElementById('darkModeToggle');
+const body = document.body;
+
+darkModeToggle.addEventListener('click', () => {
+  body.classList.toggle('dark-mode');
+  const isDarkMode = body.classList.contains('dark-mode');
+  localStorage.setItem('darkMode', isDarkMode);
+  darkModeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+});
+
+// Verificar preferencia de modo oscuro al cargar la página
+if (localStorage.getItem('darkMode') === 'true') {
+  body.classList.add('dark-mode');
+  darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+}
+</script>
+
+</body></html>
